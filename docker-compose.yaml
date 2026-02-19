@@ -6,7 +6,7 @@ services:
     volumes:
       - dashboard-data:/data
     environment:
-      PROBER_TOKEN: change-me-token
+      PROBER_DASHBOARD_TOKEN: change-me-token
       PROBER_DASHBOARD_ADMIN_PASSWORD: change-me-admin
     restart: unless-stopped
 
