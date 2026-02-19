@@ -1,0 +1,25 @@
+services:
+  dashboard:
+    image: ghcr.io/therainisme/prober-dashboard:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - dashboard-data:/data
+    environment:
+      PROBER_TOKEN: change-me-token
+      PROBER_DASHBOARD_ADMIN_PASSWORD: change-me-admin
+    restart: unless-stopped
+
+  agent:
+    image: ghcr.io/therainisme/prober-agent:latest
+    environment:
+      PROBER_DASHBOARD_URL: http://dashboard:8080
+      PROBER_TOKEN: change-me-token
+      PROBER_AGENT_ID: local-agent
+      PROBER_AGENT_NAME: Local Agent
+    depends_on:
+      - dashboard
+    restart: unless-stopped
+
+volumes:
+  dashboard-data:
