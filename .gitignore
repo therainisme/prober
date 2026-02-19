@@ -1,0 +1,6 @@
+/target
+/data
+.DS_Store
+
+# runtime config with secrets (use .example as template)
+config/dashboard.toml

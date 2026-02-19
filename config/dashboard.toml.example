@@ -1,0 +1,30 @@
+# Dashboard listen address
+listen = "0.0.0.0:8080"
+
+# Shared token used by all agents
+# Recommend overriding with env or CLI in production
+token = "change-me-token"
+
+# Plain password will be hashed in-memory at startup.
+# You can also provide argon2 hash string directly:
+#   echo -n 'your-password' | argon2 $(openssl rand -base64 16) -id -e
+admin_password = "change-me-admin"
+
+data_dir = "./data"
+
+# optional
+# telegram_bot_token = ""
+# telegram_chat_id = ""
+
+offline_threshold_seconds = 7200
+alert_quiet_window_minutes = 0
+log_level = "info"
+realtime_interval_seconds = 3
+heartbeat_interval_seconds = 3600
+command_expire_seconds = 600
+soft_delete_retention_days = 7
+raw_retention_days = 30
+
+# SQLite runtime params
+sqlite_busy_timeout_ms = 5000
+sqlite_wal_autocheckpoint = 1000

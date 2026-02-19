@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prober Dashboard</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <header class="shell-head">
+      <div class="brand-wrap">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <h1>Prober <span class="brand-sub">Infrastructure Metrics</span></h1>
+      </div>
+      <div class="auth">
+        <svg id="themeBtn" class="theme-icon" viewBox="0 0 24 24" width="16" height="16" aria-label="Toggle theme"></svg>
+        <span id="authBtn" class="auth-label">Guest</span>
+      </div>
+    </header>
+
+    <main class="shell-main">
+      <section class="toolbar">
+        <input id="searchInput" type="text" placeholder="Search by name" />
+        <label class="checkbox-wrap">
+          <input id="showDeleted" type="checkbox" />
+          <span>Show offline</span>
+        </label>
+        <div class="stats-inline">
+          <span class="stat-chip">Total <b id="totalCount">0</b></span>
+          <span class="stat-chip online">Online <b id="onlineCount">0</b></span>
+          <span class="stat-chip offline">Offline <b id="offlineCount">0</b></span>
+        </div>
+      </section>
+
+      <section class="content-area">
+        <div id="agentsList" class="agents-list"></div>
+      </section>
+    </main>
+
+    <div id="loginOverlay" class="login-overlay hidden">
+      <div class="login-card">
+        <h2>Admin Login</h2>
+        <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" />
+        <div id="loginError" class="login-error"></div>
+        <div class="login-actions">
+          <button id="loginCancel" class="btn btn-ghost">Cancel</button>
+          <button id="loginSubmit" class="btn btn-primary">Login</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="confirmOverlay" class="login-overlay hidden">
+      <div class="login-card">
+        <p id="confirmMessage"></p>
+        <div class="login-actions">
+          <button id="confirmCancel" class="btn btn-ghost">Cancel</button>
+          <button id="confirmOk" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/assets/app.js"></script>
+  </body>
+</html>
