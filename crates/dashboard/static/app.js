@@ -119,6 +119,12 @@ function updateStats(list) {
 }
 
 function renderList() {
+  showDeleted.parentElement.style.display = state.admin ? "" : "none";
+  if (!state.admin && state.showDeleted) {
+    state.showDeleted = false;
+    showDeleted.checked = false;
+  }
+
   const filtered = state.agents.filter((a) => {
     if (a.deleted_at) return false;
     if (!state.showDeleted && !a.online) return false;
@@ -134,15 +140,17 @@ function renderList() {
     return;
   }
 
+  const actionClass = (state.admin && state.showDeleted) ? "has-action" : "";
+
   const header = `
-    <div class="row row-header">
+    <div class="row row-header ${actionClass}">
       <span class="col-name">Host</span>
       <span class="col-metric">CPU</span>
       <span class="col-metric">Memory</span>
       <span class="col-metric">Disk</span>
       <span class="col-net">Network</span>
       <span class="col-time">Last Seen</span>
-      <span class="col-action"></span>
+      ${actionClass ? '<span class="col-action"></span>' : ""}
     </div>`;
 
   const rows = filtered
@@ -175,14 +183,14 @@ function renderList() {
       const diskDetail = a.online ? fmtBytesPair(a.metrics?.disk_used_bytes, a.metrics?.disk_total_bytes) : "";
 
       return `
-      <div class="row ${selected} ${clickable}" data-open-id="${esc(a.agent_id)}">
+      <div class="row ${selected} ${clickable} ${actionClass}" data-open-id="${esc(a.agent_id)}">
         <span class="col-name"><span class="dot ${cls}"></span>${esc(a.display_name || a.agent_id || "-")}</span>
         <span class="col-metric">${miniBar("CPU", fmtPercent(cpuPct), cpuPct, cpuDetail)}</span>
         <span class="col-metric">${miniBar("Mem", memText, memPct, memDetail)}</span>
         <span class="col-metric">${miniBar("Disk", diskText, diskPct, diskDetail)}</span>
         <span class="col-net">${netText}</span>
         <span class="col-time">${fmtTime(a.last_seen)}</span>
-        <span class="col-action">${action}</span>
+        ${actionClass ? `<span class="col-action">${action}</span>` : ""}
         ${detailHtml}
       </div>`;
     })

@@ -283,7 +283,7 @@ h1 {
 /* ---- row grid ---- */
 .row {
   display: grid;
-  grid-template-columns: minmax(140px, 1.5fr) repeat(3, minmax(100px, 180px)) 180px 150px 72px;
+  grid-template-columns: minmax(140px, 1.5fr) repeat(3, minmax(100px, 170px)) 150px 150px;
   align-items: center;
   gap: 0 24px;
   padding: 14px 16px 18px;
@@ -293,6 +293,10 @@ h1 {
 }
 
 .row:last-child { border-bottom: none; }
+
+.row.has-action {
+  grid-template-columns: minmax(140px, 1.5fr) repeat(3, minmax(100px, 160px)) 130px 135px 50px;
+}
 
 .row-header {
   min-height: 42px;
