@@ -64,6 +64,15 @@ function fmtUsage(used, total) {
   return `${p.toFixed(1)}%`;
 }
 
+function fmtBytesPair(used, total) {
+  if (used == null || total == null || total === 0) return "";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  let t = Number(total), idx = 0;
+  while (t >= 1024 && idx < units.length - 1) { t /= 1024; idx++; }
+  const u = Number(used) / Math.pow(1024, idx);
+  return `${u.toFixed(1)}/${t.toFixed(1)} ${units[idx]}`;
+}
+
 function usagePercent(used, total) {
   if (used == null || total == null || total <= 0) return null;
   return Math.max(0, Math.min(100, (Number(used) / Number(total)) * 100));
@@ -148,6 +157,7 @@ function renderList() {
         : "";
 
       const cpuPct = a.online ? a.metrics?.cpu_usage_percent : null;
+      const cpuCores = a.online ? a.metrics?.cpu_cores : null;
       const memPct = a.online ? usagePercent(a.metrics?.memory_used_bytes, a.metrics?.memory_total_bytes) : null;
       const diskPct = a.online ? usagePercent(a.metrics?.disk_used_bytes, a.metrics?.disk_total_bytes) : null;
 
@@ -160,12 +170,16 @@ function renderList() {
       const diskText = a.online ? fmtUsage(a.metrics?.disk_used_bytes, a.metrics?.disk_total_bytes) : "-";
       const netText = a.online ? `↓${fmtRate(a.metrics?.rx_bps)} ↑${fmtRate(a.metrics?.tx_bps)}` : "-";
 
+      const cpuDetail = cpuCores ? `${cpuCores}C` : "";
+      const memDetail = a.online ? fmtBytesPair(a.metrics?.memory_used_bytes, a.metrics?.memory_total_bytes) : "";
+      const diskDetail = a.online ? fmtBytesPair(a.metrics?.disk_used_bytes, a.metrics?.disk_total_bytes) : "";
+
       return `
       <div class="row ${selected} ${clickable}" data-open-id="${esc(a.agent_id)}">
         <span class="col-name"><span class="dot ${cls}"></span>${esc(a.display_name || a.agent_id || "-")}</span>
-        <span class="col-metric">${miniBar("CPU", fmtPercent(cpuPct), cpuPct)}</span>
-        <span class="col-metric">${miniBar("Mem", memText, memPct)}</span>
-        <span class="col-metric">${miniBar("Disk", diskText, diskPct)}</span>
+        <span class="col-metric">${miniBar("CPU", fmtPercent(cpuPct), cpuPct, cpuDetail)}</span>
+        <span class="col-metric">${miniBar("Mem", memText, memPct, memDetail)}</span>
+        <span class="col-metric">${miniBar("Disk", diskText, diskPct, diskDetail)}</span>
         <span class="col-net">${netText}</span>
         <span class="col-time">${fmtTime(a.last_seen)}</span>
         <span class="col-action">${action}</span>
@@ -177,9 +191,10 @@ function renderList() {
   agentsList.innerHTML = header + rows;
 }
 
-function miniBar(label, text, percent) {
+function miniBar(label, text, percent, detail) {
   const w = percent != null ? percent : 0;
-  return `<span class="mini-val"><span class="mini-label">${label}</span>${text}</span><span class="mini-bar"><span style="width:${w}%"></span></span>`;
+  const detailHtml = detail ? `<span class="mini-detail">${detail}</span>` : "";
+  return `<span class="mini-top"><span class="mini-label">${label}</span>${detailHtml}<span class="mini-val">${text}</span></span><span class="mini-bar"><span style="width:${w}%"></span></span>`;
 }
 
 function buildSparkline(points, color, formatter, fixedMax) {

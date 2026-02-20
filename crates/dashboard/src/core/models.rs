@@ -160,6 +160,7 @@ pub struct UpgradeResponse {
 #[derive(Debug, Serialize, Clone)]
 pub struct MetricSnapshot {
     pub cpu_usage_percent: Option<f64>,
+    pub cpu_cores: Option<u32>,
     pub memory_used_bytes: Option<u64>,
     pub memory_total_bytes: Option<u64>,
     pub disk_used_bytes: Option<u64>,

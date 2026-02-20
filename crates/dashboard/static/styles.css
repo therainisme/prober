@@ -283,9 +283,9 @@ h1 {
 /* ---- row grid ---- */
 .row {
   display: grid;
-  grid-template-columns: minmax(140px, 1.5fr) repeat(3, 100px) 180px 150px 72px;
+  grid-template-columns: minmax(140px, 1.5fr) repeat(3, minmax(100px, 180px)) 180px 150px 72px;
   align-items: center;
-  gap: 0 16px;
+  gap: 0 24px;
   padding: 14px 16px 18px;
   min-height: 56px;
   border-bottom: 1px solid var(--line);
@@ -347,17 +347,30 @@ h1 {
   gap: 3px;
 }
 
+.mini-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 .mini-label {
   display: none;
   font-weight: 600;
   color: var(--muted);
-  margin-right: 4px;
+  margin-right: auto;
 }
 
 .mini-val {
   font-size: 0.82rem;
   font-weight: 620;
   font-variant-numeric: tabular-nums;
+}
+
+.mini-detail {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin-right: auto;
 }
 
 .mini-bar {
@@ -489,6 +502,7 @@ h1 {
 
   .row-header { display: none; }
   .mini-label { display: inline; }
+  .mini-detail { display: none; }
 
   .row {
     grid-template-columns: 1fr 1fr 1fr;

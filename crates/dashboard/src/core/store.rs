@@ -172,6 +172,7 @@ pub fn query_history_rollups(
                 clock_skewed: false,
                 metrics: MetricSnapshot {
                     cpu_usage_percent: row.get::<_, Option<f64>>(1)?,
+                    cpu_cores: None,
                     memory_used_bytes: row.get::<_, Option<f64>>(2)?.map(|v| v.round() as u64),
                     memory_total_bytes: row.get::<_, Option<f64>>(3)?.map(|v| v.round() as u64),
                     disk_used_bytes: row.get::<_, Option<f64>>(4)?.map(|v| v.round() as u64),
@@ -190,6 +191,7 @@ pub fn parse_metrics_from_payload_str(payload_json: &str) -> Option<MetricSnapsh
     let payload: Value = serde_json::from_str(payload_json).ok()?;
     Some(MetricSnapshot {
         cpu_usage_percent: get_f64(&payload, &["cpu", "usage_percent"]),
+        cpu_cores: get_u64(&payload, &["cpu", "cores"]).map(|v| v as u32),
         memory_used_bytes: get_u64(&payload, &["memory", "used_bytes"]),
         memory_total_bytes: get_u64(&payload, &["memory", "total_bytes"]),
         disk_used_bytes: get_u64(&payload, &["disk", "used_bytes"]),
