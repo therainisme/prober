@@ -33,6 +33,7 @@ use crate::core::store;
 pub fn build_router(state: AppState) -> Router {
     Router::new()
         .route("/", get(index_html))
+        .route("/favicon.ico", get(favicon))
         .route("/assets/app.js", get(asset_app_js))
         .route("/assets/styles.css", get(asset_styles_css))
         .route("/healthz", get(healthz))
@@ -94,6 +95,24 @@ fn serve_static(relative_path: &str, embedded: &'static str) -> String {
         }
     }
     embedded.to_string()
+}
+
+fn serve_static_bytes(relative_path: &str, embedded: &'static [u8]) -> Vec<u8> {
+    if cfg!(debug_assertions) {
+        let manifest_dir = env!("CARGO_MANIFEST_DIR");
+        let path = std::path::Path::new(manifest_dir).join(relative_path);
+        if let Ok(content) = std::fs::read(&path) {
+            return content;
+        }
+    }
+    embedded.to_vec()
+}
+
+async fn favicon() -> impl IntoResponse {
+    (
+        [(header::CONTENT_TYPE, "image/x-icon")],
+        serve_static_bytes("static/favicon.ico", include_bytes!("../static/favicon.ico")),
+    )
 }
 
 async fn healthz() -> Json<Value> {
